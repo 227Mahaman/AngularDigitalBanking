@@ -1,0 +1,131 @@
+<div class="container mt-2">
+    <div class="row">
+        <div class="col col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Accounts
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="accountFormGroup" (ngSubmit)="handleSearchAccount()">
+                        <div class="input-group">
+                            <label for="accountId" class="input-group-text">Account Id</label>
+                            <input type="text" name="accountId" id="accountId" formControlName="accountId" class="form-control">
+                            <button class="btn btn-info">
+                                <i class="bi bi-search"></i>
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                    <ng-template #error_template>
+                        <ng-container *ngIf="errorMessage">
+                            <div class="text-danger">{{errorMessage}}</div>
+                        </ng-container>
+                        <ng-template #loading>
+                            Loading ...
+                        </ng-template>
+                    </ng-template>
+                    <ng-container *ngIf="accountObservable | async as accountDetails">
+                        <div class="mb-2">
+                            <label for="accountId">Account ID : </label>
+                            <label for=""><strong> {{accountDetails.accountId}}</strong></label>
+                        </div>
+                        <div class="mb-2">
+                            <label for="balance">Balance : </label>
+                            <label for=""><strong> {{accountDetails.balance | number : '1.2-2'}}</strong></label>
+                        </div>
+                        @if(accountDetails.accountOperationDTOS){
+                            <div>
+                                <table class="table table-hover mt-2">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th><th>Date</th><th>Type</th><th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr *ngFor="let operation of accountDetails.accountOperations"> -->
+                                        @for (operation of accountDetails.accountOperationDTOS; track operation.id) {
+                                            <tr>
+                                                <td>{{operation.id}}</td>
+                                                <td>{{operation.operationDate | date : 'dd-MM-yyyy HH:mm:ss'}}</td>
+                                                <td>{{operation.type}}</td>
+                                                <td class="text-end">{{operation.amount | number:'1.2-2'}}</td>
+                                                
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                @if(accountDetails.totalPages>1){
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <li class="page-item" [class.disabled]="accountDetails.currentPage === 0">
+                                                <a class="page-link" (click)="goToPage(0)">First</a>
+                                            </li>
+                                            <li class="page-item" [class.disabled]="accountDetails.currentPage === 0">
+                                                <a class="page-link" (click)="goToPage(accountDetails.currentPage - 1)">Previous</a>
+                                            </li>
+                                            <li class="page-item disabled">
+                                                <a class="page-link">Page {{accountDetails.currentPage + 1}} of {{accountDetails.totalPages}}</a>
+                                            </li>
+                                            <li class="page-item" [class.disabled]="accountDetails.currentPage === accountDetails.totalPages - 1">
+                                                <a class="page-link" (click)="goToPage(accountDetails.currentPage + 1)">Next</a>
+                                            </li>
+                                            <li class="page-item" [class.disabled]="accountDetails.currentPage === accountDetails.totalPages - 1">
+                                                <a class="page-link" (click)="goToPage(accountDetails.totalPages - 1)">Last</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                }
+                            </div>
+                        }  
+                        @else {
+                        <div>
+                            <div class="alert alert-danger">    
+                                Operations not found!
+                            </div>
+                        </div>
+                        }
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="card" *ngIf="accountObservable">
+                <div class="card-header">
+                    Operations
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="operationFormGroup" (ngSubmit)="handleAccountOperation()" method="post">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" formControlName="operationType" value="DEBIT" name="operationType" id="operationType">
+                            <label for="debit" class="form-check-label">DEBIT:</label>
+                        </div> 
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" formControlName="operationType" value="CREDIT" name="operationType" id="operationType">
+                            <label for="credit" class="form-check-label">CREDIT:</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" formControlName="operationType" value="TRANSFER" name="operationType" id="operationType">
+                            <label for="transfer" class="form-check-label">TRANSFER:</label>
+                        </div>
+                        <div class="mb-3" *ngIf="operationFormGroup.value.operationType==='TRANSFER'">
+                            <label for="accountDestination" class="form-label">Account Destination :</label>
+                            <input type="text" formControlName="accountDestination" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount :</label>
+                            <input type="text" formControlName="amount" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description :</label>
+                            <input type="text" formControlName="description" class="form-control">
+                        </div>
+                        <div class="d-grid mt-2">
+                            <button class="btn btn-success" type="submit">Save Operation</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

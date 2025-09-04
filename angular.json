@@ -22,7 +22,11 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -50,6 +54,10 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "fileReplacements": {
+              "replace": "src/environments/environment.ts",
+              "with": "src/environments/environment.prod.ts"
             }
           },
           "defaultConfiguration": "production"
@@ -86,5 +94,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "35ff69d7-8a19-4574-888b-68adb6028f0c"
   }
 }

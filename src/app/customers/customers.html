@@ -1,0 +1,76 @@
+<div class="container mt-2">
+    <ng-container *ngIf="customers | async as listCustomers; else failureOrLoading">
+        <div class="card">
+            <div class="card-header">
+                Customers
+            </div>
+            <div class="card-body">
+                <div *ngIf="searchFormGroup">
+                    <form [formGroup]="searchFormGroup" (ngSubmit)="handleSearchCustomers()">
+                    <div class="input-group">
+                        <label class="input-group-text">Keyword :</label>
+                        <input type="text" class="form-control" placeholder="Search by name" formControlName="keyword">
+                        <button class="btn btn-info" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        <!-- <button class="btn btn-secondary" type="button" (click)="resetSearch()">
+                            <i class="bi bi-arrow-clockwise"></i> Reset
+                        </button> -->
+                    </div>
+                </form>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of customers | async; track $index) {
+                            <tr>
+                                <th scope="row">{{$index+1}}</th>
+                                <td>{{item.name}}</td>
+                                <td>{{item.email}}</td>
+                                <td>
+                                    <button (click)="handleDeleteCustomer(item)" class="btn btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button (click)="handleCustomerAccounts(item)" class="btn btn-success">
+                                        Accounts
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    
+                </table>
+            </div>  
+        </div>
+    </ng-container>
+    <ng-template #failureOrLoading>
+        <ng-container *ngIf="errorMessage; else loading">
+            <div class="alert alert-danger">
+                <strong>Error:</strong> {{errorMessage}}
+        </div>
+        </ng-container>
+        <ng-template #loading>
+            <div class="alert alert-info">
+                <strong>Loading...</strong>
+            </div>
+
+        </ng-template>
+    </ng-template>
+    <!-- @if (errorMessage) {
+            <div class="alert alert-danger">
+                <strong>Error:</strong> {{errorMessage}}
+            </div>
+        } -->
+    <!-- @if (customers | async) {
+        
+    } -->
+</div>
