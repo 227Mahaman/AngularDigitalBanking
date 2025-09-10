@@ -8,6 +8,7 @@ import { NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { listeners } from 'process';
 import { Router } from '@angular/router';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-customers',
@@ -27,7 +28,7 @@ export class Customers implements OnInit {
    * @param fb 
    * @param router On injecte le routing pour la navigation
    */
-  constructor(private customerService:CustomerService, private fb: FormBuilder, private router : Router){
+  constructor(private customerService:CustomerService, private fb: FormBuilder, private router : Router, public auth: Auth){
   }
 
   ngOnInit(): void{
@@ -82,7 +83,7 @@ export class Customers implements OnInit {
   }
 
   handleCustomerAccounts(customer: CustomerModel) {
-    this.router.navigateByUrl("/customer-accounts/"+customer.id, {state: customer});
+    this.router.navigateByUrl("/admin/customer-accounts/"+customer.id, {state: customer});
   }
 
 }

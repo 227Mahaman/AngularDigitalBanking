@@ -1,12 +1,27 @@
-import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from "@angular/router";
+import { Auth } from '../services/auth';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink],
+  imports: [RouterLink, NgIf],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
-export class Navbar {
+export class Navbar implements OnInit {
+
+  username!: string;
+
+  constructor(public auth: Auth, private router : Router) {
+  }
+
+  ngOnInit(): void {
+    this.username = localStorage.getItem('username') || 'Guest';
+  }
+
+  handleLogout() {
+    this.auth.logout();
+  }
 
 }

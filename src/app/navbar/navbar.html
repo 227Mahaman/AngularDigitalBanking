@@ -11,25 +11,28 @@
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/accounts">Accounts</a>
+          <a class="nav-link" routerLink="/admin/accounts">Accounts</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Customer
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/customers">List Customers</a></li>
-            <li><a class="dropdown-item" href="/new-customer">New Customer</a></li> 
+            <li><a class="dropdown-item" href="/admin/customers">List Customers</a></li>
+            <li *ngIf="auth.roles && auth.roles.includes('ROLE_ADMIN')"><a class="dropdown-item" href="/admin/new-customer">New Customer</a></li> 
           </ul>
         </li>
+      </ul>
+      <ul class="navbar" *ngIf="auth.authenticated==true">
+        <!-- isAuthenticated() -->
         <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          <a class="nav-link active">{{this.auth.username}}</a>
+          <!-- getUsername() -->
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-danger" (click)="handleLogout()">Logout</button>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
     </div>
   </div>
 </nav>

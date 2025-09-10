@@ -5,6 +5,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { AccountDetails } from '../model/account.model';
 import { AsyncPipe, DatePipe, DecimalPipe, NgIf} from '@angular/common';
 import { describe } from 'node:test';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-accounts',
@@ -21,7 +22,7 @@ export class Accounts implements OnInit {
   operationFormGroup!: FormGroup;
   errorMessage! : string;
 
-  constructor(private fb:FormBuilder, private accountService : AccountsService){//Injection du FormBuilder et AccountsService
+  constructor(private fb:FormBuilder, private accountService : AccountsService, public auth : Auth){//Injection du FormBuilder, AccountsService et Auth Service
 
   }
 
